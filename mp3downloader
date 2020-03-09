@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+# if want to download playlist, remove the video part from the URL
+# e.g:
+# original url: https://www.youtube.com/watch?v=8h9e8gxm43s&list=RDEMIiz34w04aCC1LtxFCoM_EQ
+# remove video: https://www.youtube.com/watch?list=RDEMIiz34w04aCC1LtxFCoM_EQ
+
+# youtube-dl --extract-audio --audio-format mp3 -o "%(title)s.%(ext)s" $1
+
+basedir="$(dirname $(readlink -f $0))"
+source ${basedir}/config
+
+#if [[ ! -f ${basedir}/youtube-dl ]]; then
+#  echo -e "${bold}${red}ERROR: Make sure latest youtube-dl script are in the same directory."
+#  echo -e "Download from https://github.com/rg3/youtube-dl/#installation${nc}"
+#  exit 99
+#fi
+
+eval ${lines}
+
+if [[ ! -f ${basedir}/bin/youtube-dl ]]; then
+  echo -e "${bold}${green}INFO: ${yellow}youtube-dl binary is nowhere to be found. Will start downloading.."
+  echo -e ""
+  yt_binary="${basedir}/bin/youtube-dl"
+  mkdir -p ${basedir}/bin
+  curl -L https://yt-dl.org/downloads/latest/youtube-dl -o ${yt_binary}
+  if [[ $? -ne 0 ]]; then
+    echo ; echo -e "${bold}${red}ERROR: ${yellow}Download failed. ${red}*Shot myself in the head.*"
+    exit 99
+  fi
+  chmod 755 ${yt_binary}
+  echo ; echo -e "${bold}${green}INFO: ${yellow}youtube-dl binary has successfully been downloaded.${nc}"
+  eval ${lines}
+fi
+
+youtube_dl="${basedir}/bin/youtube-dl"
+
+if [[ $# -eq 0 ]]; then
+  echo -e "${bold}${red}ERROR: ${yellow}Video or playlist URL required."
+  echo -e ""
+  echo -e "${green}Example:"
+  echo -e "${green}Video URL    : https://www.youtube.com/watch?v=8h9e8gxm43s"
+  echo -e "${green}Playlist URL : https://www.youtube.com/watch?list=RDEMIiz34w04aCC1LtxFCoM_EQ${nc}"
+  eval ${lines}
+  exit 99
+fi
+
+# Make sure youtube-dl is latest version
+${youtube_dl} -U
+eval ${lines}
+
+video=0
+playlist=0
+
+if [[ $(echo -e $1 | grep -c '?v') -ne 0 ]]; then
+  video=1
+fi
+
+if [[ $(echo -e $1 | grep -c '&list') -ne 0 ]]; then
+  playlist=1
+fi
+
+#if [[ $video -eq 1 ]] && [[ $playlist -eq 1 ]]; then
+#  read -p "Would you like to download the whole playlist? (y/N): "
+#  if [[ "${REPLY,,}" =~ ^y ]]; then
+#     #echo "youtube-dl -f 140 --yes-playlist $1"
+#     youtube-dl -f 140 --yes-playlist $1
+#  elif [[ "-z $REPLY" ]] || [[ "${REPLY,,}" =~ ^n ]]; then
+#     #echo "youtube-dl -f 140 --no-playlist $1"
+#     #youtube-dl -f 140 --no-playlist $1
+#     youtube-dl --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
+#  else
+#     echo
+#     echo -e "${bold}${red}Poor guy. You don't even know what you want in life!${nc}"
+#     exit 99
+#  fi
+#
+#
+#  #echo -e "${bold}${red}ERROR: Please remove video part from the URL to download from a playlist."
+#  #echo -e ""
+#  #echo -e "Example:"
+#  #echo -e "original URL       : https://www.youtube.com/watch?v=8h9e8gxm43s&list=RDEMIiz34w04aCC1LtxFCoM_EQ"
+#  #echo -e "video part removed : https://www.youtube.com/watch?&list=RDEMIiz34w04aCC1LtxFCoM_EQ${nc}"
+#  #exit 99
+#fi
+
+if [[ $1 =~ list ]]; then
+  read -p "Would you like to download the whole playlist? (y/N): "
+eval ${lines}
+fi
+
+if [[ "${REPLY,,}" =~ ^y ]]; then
+   ${youtube_dl} --yes-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
+eval ${lines}
+elif [[ "-z $REPLY" ]] || [[ "${REPLY,,}" =~ ^n ]]; then
+   ${youtube_dl} --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$@"
+eval ${lines}
+else
+   echo
+   echo -e "${bold}${red}Poor guy. You don't even know what you want in life!${nc}"
+   eval ${lines}
+   exit 99
+fi
