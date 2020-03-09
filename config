@@ -1,0 +1,14 @@
+# Base directory
+basedir="$(dirname $(readlink -f $0))"
+
+# POSIX Colors
+red="\e[31m"
+green="\e[32m"
+yellow="\e[33m"
+blue="\e[34m"
+
+bold="\e[1m"
+nc="\e[0m"
+
+# Horizontal lines
+lines="printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -"
