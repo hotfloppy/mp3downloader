@@ -1,20 +1,7 @@
 #!/usr/bin/env bash
 
-# if want to download playlist, remove the video part from the URL
-# e.g:
-# original url: https://www.youtube.com/watch?v=8h9e8gxm43s&list=RDEMIiz34w04aCC1LtxFCoM_EQ
-# remove video: https://www.youtube.com/watch?list=RDEMIiz34w04aCC1LtxFCoM_EQ
-
-# youtube-dl --extract-audio --audio-format mp3 -o "%(title)s.%(ext)s" $1
-
 basedir="$(dirname $(readlink -f $0))"
 source ${basedir}/config
-
-#if [[ ! -f ${basedir}/youtube-dl ]]; then
-#  echo -e "${bold}${red}ERROR: Make sure latest youtube-dl script are in the same directory."
-#  echo -e "Download from https://github.com/rg3/youtube-dl/#installation${nc}"
-#  exit 99
-#fi
 
 eval ${lines}
 
@@ -60,44 +47,20 @@ if [[ $(echo -e $1 | grep -c '&list') -ne 0 ]]; then
   playlist=1
 fi
 
-#if [[ $video -eq 1 ]] && [[ $playlist -eq 1 ]]; then
-#  read -p "Would you like to download the whole playlist? (y/N): "
-#  if [[ "${REPLY,,}" =~ ^y ]]; then
-#     #echo "youtube-dl -f 140 --yes-playlist $1"
-#     youtube-dl -f 140 --yes-playlist $1
-#  elif [[ "-z $REPLY" ]] || [[ "${REPLY,,}" =~ ^n ]]; then
-#     #echo "youtube-dl -f 140 --no-playlist $1"
-#     #youtube-dl -f 140 --no-playlist $1
-#     youtube-dl --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
-#  else
-#     echo
-#     echo -e "${bold}${red}Poor guy. You don't even know what you want in life!${nc}"
-#     exit 99
-#  fi
-#
-#
-#  #echo -e "${bold}${red}ERROR: Please remove video part from the URL to download from a playlist."
-#  #echo -e ""
-#  #echo -e "Example:"
-#  #echo -e "original URL       : https://www.youtube.com/watch?v=8h9e8gxm43s&list=RDEMIiz34w04aCC1LtxFCoM_EQ"
-#  #echo -e "video part removed : https://www.youtube.com/watch?&list=RDEMIiz34w04aCC1LtxFCoM_EQ${nc}"
-#  #exit 99
-#fi
-
 if [[ $1 =~ list ]]; then
   read -p "Would you like to download the whole playlist? (y/N): "
-eval ${lines}
+  eval ${lines}
 fi
 
 if [[ "${REPLY,,}" =~ ^y ]]; then
-   ${youtube_dl} --yes-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
-eval ${lines}
+  ${youtube_dl} --yes-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
+  eval ${lines}
 elif [[ "-z $REPLY" ]] || [[ "${REPLY,,}" =~ ^n ]]; then
-   ${youtube_dl} --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$@"
-eval ${lines}
+  ${youtube_dl} --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$@"
+  eval ${lines}
 else
-   echo
-   echo -e "${bold}${red}Poor guy. You don't even know what you want in life!${nc}"
-   eval ${lines}
-   exit 99
+  echo
+  echo -e "${bold}${red}Poor guy. You don't even know what you want in life!${nc}"
+  eval ${lines}
+  exit 99
 fi
