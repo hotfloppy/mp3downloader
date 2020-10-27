@@ -11,7 +11,6 @@ if [[ ! -f ${basedir}/bin/downloader ]]; then
   downloader_binary="${basedir}/bin/downloader"
   mkdir -p ${basedir}/bin
   curl -L $(echo "aHR0cHM6Ly95dC1kbC5vcmcvZG93bmxvYWRzL2xhdGVzdC95b3V0dWJlLWRsCg==" | base64 --decode) -o ${downloader_binary}
-  # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o ${downloader_binary}
   if [[ $? -ne 0 ]]; then
     echo ; echo -e "${bold}${red}ERROR: ${yellow}Download failed. ${red}*Shot myself in the head.*"
     exit 99
