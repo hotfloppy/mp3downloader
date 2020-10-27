@@ -1,2 +1,2 @@
 # mp3downloader
-Download audio from Youtube and convert to MP3
+Download audio and convert to MP3

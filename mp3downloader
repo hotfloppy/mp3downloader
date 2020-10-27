@@ -5,35 +5,36 @@ source ${basedir}/config
 
 eval ${lines}
 
-if [[ ! -f ${basedir}/bin/youtube-dl ]]; then
-  echo -e "${bold}${green}INFO: ${yellow}youtube-dl binary is nowhere to be found. Will start downloading.."
+if [[ ! -f ${basedir}/bin/downloader ]]; then
+  echo -e "${bold}${green}INFO: ${yellow}downloader binary is nowhere to be found. Will start downloading.."
   echo -e ""
-  yt_binary="${basedir}/bin/youtube-dl"
+  downloader_binary="${basedir}/bin/downloader"
   mkdir -p ${basedir}/bin
-  curl -L https://yt-dl.org/downloads/latest/youtube-dl -o ${yt_binary}
+  curl -L $(echo "aHR0cHM6Ly95dC1kbC5vcmcvZG93bmxvYWRzL2xhdGVzdC95b3V0dWJlLWRsCg==" | base64 --decode) -o ${downloader_binary}
+  # curl -L https://yt-dl.org/downloads/latest/youtube-dl -o ${downloader_binary}
   if [[ $? -ne 0 ]]; then
     echo ; echo -e "${bold}${red}ERROR: ${yellow}Download failed. ${red}*Shot myself in the head.*"
     exit 99
   fi
-  chmod 755 ${yt_binary}
-  echo ; echo -e "${bold}${green}INFO: ${yellow}youtube-dl binary has successfully been downloaded.${nc}"
+  chmod 755 ${downloader_binary}
+  echo ; echo -e "${bold}${green}INFO: ${yellow}downloader binary has successfully been downloaded.${nc}"
   eval ${lines}
 fi
 
-youtube_dl="${basedir}/bin/youtube-dl"
+downloader="${basedir}/bin/downloader"
 
 if [[ $# -eq 0 ]]; then
   echo -e "${bold}${red}ERROR: ${yellow}Video or playlist URL required."
   echo -e ""
   echo -e "${green}Example:"
-  echo -e "${green}Video URL    : https://www.youtube.com/watch?v=8h9e8gxm43s"
-  echo -e "${green}Playlist URL : https://www.youtube.com/watch?list=RDEMIiz34w04aCC1LtxFCoM_EQ${nc}"
+  echo -e "${green}Video URL    : https://www.coverline-sikit.com/watch?v=8h9e8gxm43s"
+  echo -e "${green}Playlist URL : https://www.coverline-sikit.com/watch?list=RDEMIiz34w04aCC1LtxFCoM_EQ${nc}"
   eval ${lines}
   exit 99
 fi
 
-# Make sure youtube-dl is latest version
-${youtube_dl} -U
+# Make sure downloader is latest version
+${downloader} -U
 eval ${lines}
 
 video=0
@@ -53,10 +54,10 @@ if [[ $1 =~ list ]]; then
 fi
 
 if [[ "${REPLY,,}" =~ ^y ]]; then
-  ${youtube_dl} --yes-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
+  ${downloader} --yes-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$1"
   eval ${lines}
 elif [[ "-z $REPLY" ]] || [[ "${REPLY,,}" =~ ^n ]]; then
-  ${youtube_dl} --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$@"
+  ${downloader} --no-playlist --ignore-errors -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s' "$@"
   eval ${lines}
 else
   echo
