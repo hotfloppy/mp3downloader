@@ -4,6 +4,17 @@ basedir="$(dirname $(readlink -f $0))"
 source ${basedir}/config
 
 eval $lines
+echo "Checking all dependencies.."
+if [[ $(ffmpeg -version) ]]; then
+  echo "${green}[+]${nc} ffmpeg"
+else
+  echo "${red}[x]${nc} ffmpeg"
+  echo "ffmpeg not found. Please install and rerun install.sh"
+  exit 99
+fi
+echo
+
+eval $lines
 echo "Making sure $HOME/bin exist.."
 mkdir -p $HOME/bin
 
