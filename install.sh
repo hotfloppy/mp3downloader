@@ -5,10 +5,10 @@ source ${basedir}/config
 
 eval $lines
 echo "Checking all dependencies.."
-if [[ $(ffmpeg -version) ]]; then
-  echo "${green}[+]${nc} ffmpeg"
+if [[ $(ffmpeg -version 2>/dev/null >/dev/null) ]]; then
+  echo -e "${green}[+]${nc} ffmpeg"
 else
-  echo "${red}[x]${nc} ffmpeg"
+  echo -e "${red}[x]${nc} ffmpeg"
   echo "ffmpeg not found. Please install and rerun install.sh"
   exit 99
 fi
