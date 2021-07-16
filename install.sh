@@ -30,6 +30,9 @@ eval $lines
 echo "Installing mp3downloader into $HOME/bin.."
 ln -s ${basedir}/mp3downloader $HOME/bin/
 
+eval $line
+echo "NOTES: Restart your terminal, or run this command: source $myrc"
+
 eval $lines
 echo "Installation done. Enjoy!"
 
