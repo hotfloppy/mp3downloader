@@ -23,17 +23,20 @@ if [[ ! $(echo $PATH | grep $HOME/bin) ]]; then
       ;;
     *) echo "Unknown shell. Please manually add $HOME/bin to your PATH." ;;
   esac
-  source "$myrc"
 fi
+echo
 
 eval $lines
 echo "Installing mp3downloader into $HOME/bin.."
 ln -s ${basedir}/mp3downloader $HOME/bin/
+echo
 
-eval $line
+eval $lines
 echo "NOTES: Restart your terminal, or run this command: source $myrc"
+echo
 
 eval $lines
 echo "Installation done. Enjoy!"
+echo
 
 exit 0
