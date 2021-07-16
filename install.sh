@@ -34,7 +34,7 @@ echo ".. Done!"
 echo
 
 eval $lines
-echo "${green}NOTES: ${yellow}Restart your terminal, or run this command: source $myrc ${nc}"
+echo -e "${green}NOTES: ${yellow}Restart your terminal, or run this command: source $myrc ${nc}"
 echo
 
 eval $lines
