@@ -5,7 +5,7 @@ source ${basedir}/config
 
 eval $lines
 echo "Checking all dependencies.."
-if [[ $(ffmpeg -version 2>/dev/null >/dev/null) ]]; then
+if [[ ! $(ffmpeg -version 2>/dev/null >/dev/null) ]]; then
   echo -e "${green}[+]${nc} ffmpeg"
 else
   echo -e "${red}[x]${nc} ffmpeg"
