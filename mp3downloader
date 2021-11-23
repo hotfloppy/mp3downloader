@@ -10,7 +10,7 @@ if [[ ! -f ${basedir}/bin/downloader ]]; then
   echo -e ""
   downloader_binary="${basedir}/bin/downloader"
   mkdir -p ${basedir}/bin
-  curl -L $(echo "aHR0cHM6Ly95dC1kbC5vcmcvZG93bmxvYWRzL2xhdGVzdC95b3V0dWJlLWRsCg==" | base64 --decode) -o ${downloader_binary}
+  curl -L $(echo "aHR0cHM6Ly9naXRodWIuY29tL3l0LWRscC95dC1kbHAvcmVsZWFzZXMvZG93bmxvYWQvMjAyMS4xMS4xMC4xL3l0LWRscAo=" | base64 --decode) -o ${downloader_binary}
   if [[ $? -ne 0 ]]; then
     echo ; echo -e "${bold}${red}ERROR: ${yellow}Download failed. ${red}*Shot myself in the head.*"
     exit 99
