@@ -36,7 +36,7 @@ fi
 ${downloader} -U
 eval ${lines}
 
-if [[ $1 =~ list ]]; then
+if [[ "$1" =~ list ]]; then
   read -p "Would you like to download the whole playlist? (y/N): "
   eval ${lines}
 fi
